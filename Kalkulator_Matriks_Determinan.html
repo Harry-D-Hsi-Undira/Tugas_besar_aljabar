@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kalkulator Determinan Matriks</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    table {
+      margin: auto;
+    }
+    input {
+      width: 50px;
+      text-align: center;
+      margin: 5px;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Kalkulator Determinan Matriks</h1>
+  <p>Pilih ukuran matriks:</p>
+  <select id="matrixSize" onchange="renderMatrix()">
+    <option value="2">2x2</option>
+    <option value="3">3x3</option>
+  </select>
+
+  <div id="matrixInputs"></div>
+
+  <button onclick="calculateDeterminant()">Hitung Determinan</button>
+  <div id="result"></div>
+
+  <script>
+    function renderMatrix() {
+      const size = parseInt(document.getElementById("matrixSize").value);
+      const container = document.getElementById("matrixInputs");
+      container.innerHTML = "";
+
+      const table = document.createElement("table");
+      for (let i = 0; i < size; i++) {
+        const row = document.createElement("tr");
+        for (let j = 0; j < size; j++) {
+          const cell = document.createElement("td");
+          const input = document.createElement("input");
+          input.type = "number";
+          input.id = `cell-${i}-${j}`;
+          cell.appendChild(input);
+          row.appendChild(cell);
+        }
+        table.appendChild(row);
+      }
+
+      container.appendChild(table);
+    }
+
+    function calculateDeterminant() {
+      const size = parseInt(document.getElementById("matrixSize").value);
+      const matrix = [];
+
+      for (let i = 0; i < size; i++) {
+        const row = [];
+        for (let j = 0; j < size; j++) {
+          const value = parseFloat(document.getElementById(`cell-${i}-${j}`).value) || 0;
+          row.push(value);
+        }
+        matrix.push(row);
+      }
+
+      let det = 0;
+
+      if (size === 2) {
+        det = matrix[0][0]*matrix[1][1] - matrix[0][1]*matrix[1][0];
+      } else if (size === 3) {
+        det =
+          matrix[0][0] * (matrix[1][1]*matrix[2][2] - matrix[1][2]*matrix[2][1]) -
+          matrix[0][1] * (matrix[1][0]*matrix[2][2] - matrix[1][2]*matrix[2][0]) +
+          matrix[0][2] * (matrix[1][0]*matrix[2][1] - matrix[1][1]*matrix[2][0]);
+      }
+
+      document.getElementById("result").innerText = `Determinan = ${det}`;
+    }
+
+    // Render default matrix (2x2) on load
+    window.onload = renderMatrix;
+  </script>
+</body>
+</html>
